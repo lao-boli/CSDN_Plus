@@ -16,7 +16,7 @@
     function fn() {
 
         // 去广告
-        $(".adsbygoogle").css('display','none')
+        $(".adsbygoogle").css('display', 'none')
 
         //region 全文阅读功能
 
@@ -25,7 +25,7 @@
         //隐藏“关注展开”box
         $(".hide-article-box").css("display", "none");
         // 移除侧边栏目录点击事件，否则在未登录情况下点击后半部分目录会跳转到登录界面
-            $("#asidedirectory a").unbind('click');
+        $("#asidedirectory a").unbind('click');
 
         //endregion
 
