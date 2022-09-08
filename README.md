@@ -12,7 +12,15 @@ $("#asidedirectory a").unbind('click');
 ```
 原因为jQuery只能解绑本jQuery绑定的click事件，网页的click事件是由网页本身的jQuery附加的，如果采用自己导入的jQuery，则无法解绑。  
 # 
-如果一定要导入自己的jQuery，至少在调用以上代码前加上
+如果一定要导入自己的jQuery，请在userScript中加上
+```javascript 
+// @grant        unsafeWindow
+```
+并且至少在调用该行代码
+```javascript 
+$("#asidedirectory a").unbind('click');
+```
+前加上
 ```javascript 
 let $ = unsafeWindow.jQuery;
 ```
