@@ -24,4 +24,5 @@ $("#asidedirectory a").unbind('click');
 ```javascript 
 let $ = unsafeWindow.jQuery;
 ```
-让'$'变更为网页的jQuery，之后再将$赋值为自己导入的jQuery。
+让'$'变更为网页本身的jQuery，让unbind函数能够正常工作。  
+之后再将$赋值为自己导入的jQuery。
