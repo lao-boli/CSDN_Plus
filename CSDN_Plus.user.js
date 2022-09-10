@@ -1,10 +1,10 @@
 // ==UserScript==
 // @name         CSDN_Plus
 // @namespace    https://github.com/lao-boli
-// @version      1.0.0
+// @version      1.0.1
 // @description  CSDN去广告、免登陆阅读全文、自由复制
 // @author       hqully
-// @match        https://blog.csdn.net/*
+// @match        *://*.blog.csdn.net/*
 // @grant        GM_addStyle
 // @grant        GM_setClipboard
 // @run-at       document-body
