@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         CSDN_Plus
 // @namespace    https://github.com/lao-boli
-// @version      1.0.2
-// @description  CSDN去广告、免登陆阅读全文、自由复制
+// @version      1.1.0
+// @description  CSDN去广告、免登陆阅读全文、自由复制、不显示需要下载的资源、纯净阅读模式
 // @author       hqully
 // @match        *://*.blog.csdn.net/*
 // @grant        GM_addStyle
@@ -52,7 +52,58 @@
         };
 
         //#endregion
+
+        // 隐藏下载的资源,即在推荐列表中只会显示文章,不会显示需要下载的资源
+        $(".recommend-item-box.type_download").css("display", "none");
+
+        pureMode(false);
     }
+
+    function pureMode(on) {
+        if (on) {
+            // 隐藏四周的栏位
+            GM_addStyle("#csdn-toolbar{display:none}");
+            GM_addStyle(".blog_container_aside{display:none}");
+            $("#rightAside").css("display", "none");
+            $("#toolBarBox").css("display", "none");
+            $(".csdn-side-toolbar ").css("display", "none");
+
+            // 主体内容撑满屏幕
+            $(".nodata .container").css("display", "flex");
+            $(".nodata .container").css("flex", "auto");
+            $(".nodata .container main").css("flex", "auto");
+        } else {
+            // 恢复四周的栏位
+            GM_addStyle("#csdn-toolbar{display:inherit}");
+            GM_addStyle(".blog_container_aside{display:inherit}");
+            $("#rightAside").css("display", "");
+            $("#toolBarBox").css("display", "");
+            $(".csdn-side-toolbar ").css("display", "");
+
+            // 恢复主体内容宽度
+            $(".nodata .container").css("display", "");
+            $(".nodata .container").css("flex", "");
+            $(".nodata .container main").css("flex", "");
+        }
+    }
+
+    // 纯净模式切换快捷键,默认为alt+z,如有需要可自行更改
+    let pureModeOn = false;
+    document.onkeydown = (e) => {
+        if (e.altKey && e.key === "z") {
+            pureModeOn = !pureModeOn;
+            pureMode(pureModeOn);
+        }
+    };
+
+    // 使用谷歌浏览器时,如果只是按下alt键会让焦点移动到'设置'上,按键事件失效,故在此阻止默认事件
+    document.onkeyup = e => {
+        if (e.key === 'Alt'){
+            e.preventDefault()
+        }
+    }
+
+
     if (document.readyState !== "loading") {
         // 所有dom节点加载完毕，调用函数
         fn();
