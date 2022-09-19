@@ -1,12 +1,15 @@
 // ==UserScript==
 // @name         CSDN_Plus
 // @namespace    https://github.com/lao-boli
-// @version      1.1.0
+// @version      1.1.1
 // @description  CSDN去广告、免登陆阅读全文、自由复制、不显示需要下载的资源、纯净阅读模式
 // @author       hqully
 // @match        *://*.blog.csdn.net/*
 // @grant        GM_addStyle
 // @grant        GM_setClipboard
+// @grant        GM_registerMenuCommand
+// @grant        GM_setValue
+// @grant        GM_getValue
 // @license      GPL-2.0 License
 // ==/UserScript==
 (function () {
@@ -55,9 +58,11 @@
 
         // 隐藏下载的资源,即在推荐列表中只会显示文章,不会显示需要下载的资源
         $(".recommend-item-box.type_download").css("display", "none");
-
-        pureMode(false);
     }
+
+
+    //#region 纯净模式功能
+    let pureModeOn = false;
 
     function pureMode(on) {
         if (on) {
@@ -87,22 +92,29 @@
         }
     }
 
-    // 纯净模式切换快捷键,默认为alt+z,如有需要可自行更改
-    let pureModeOn = false;
+    function handlePureMode() {
+        pureModeOn = !pureModeOn;
+        pureMode(pureModeOn);
+    };
+
+    // 快捷键控制纯净模式切换,快捷键默认为alt+z,如有需要可自行更改
     document.onkeydown = (e) => {
         if (e.altKey && e.key === "z") {
-            pureModeOn = !pureModeOn;
-            pureMode(pureModeOn);
+            handlePureMode();
         }
     };
 
     // 使用谷歌浏览器时,如果只是按下alt键会让焦点移动到'设置'上,按键事件失效,故在此阻止默认事件
     document.onkeyup = e => {
         if (e.key === 'Alt'){
-            e.preventDefault()
+            e.preventDefault();
         }
     }
 
+    // 菜单控制纯净模式切换
+    GM_registerMenuCommand('纯净模式',handlePureMode,'p');
+
+    //#endregion
 
     if (document.readyState !== "loading") {
         // 所有dom节点加载完毕，调用函数
