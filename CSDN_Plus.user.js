@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         CSDN_Plus
 // @namespace    https://github.com/lao-boli
-// @version      1.1.1
+// @version      1.1.2
 // @description  CSDN去广告、免登陆阅读全文、自由复制、不显示需要下载的资源、纯净阅读模式
 // @author       hqully
 // @match        *://*.blog.csdn.net/*
@@ -13,31 +13,45 @@
 // @license      GPL-2.0 License
 // ==/UserScript==
 (function () {
-    "use strict";
+    ("use strict");
 
-    // 主要功能函数
-    function fn() {
+    let pureModeOn = false;
+
+    // 主要功能函数聚合
+    function functionAggregation() {
+        init();
+        removeAds();
+        fullTextRead();
+        freeCopy();
+        hideColumnInfo();
+        hideDownload();
+        extendCode();
+        handlePureMode();
+    }
+
+    // 自动展开长代码块
+    function extendCode() {
+        $(".hide-preCode-box").css("display", "none");
+        $(".set-code-hide.prettyprint").removeClass("set-code-hide");
+        $(".set-code-hide").removeClass("set-code-hide");
+    }
+
+    function removeAds() {
         // 去广告
         $(".adsbygoogle").css("display", "none");
+    }
 
-        //#region 全文阅读功能
+    // 隐藏下载的资源,即在推荐列表中只会显示文章,不会显示需要下载的资源
+    function hideDownload() {
+        $(".recommend-item-box.type_download").css("display", "none");
+    }
 
-        // 不隐藏文章内容
-        $("#article_content").css("height", "auto");
-        //隐藏“关注展开”box
-        $(".hide-article-box").css("display", "none");
-        // 移除侧边栏目录点击事件，否则在未登录情况下点击后半部分目录会跳转到登录界面
-        $("#asidedirectory a").unbind("click");
-
-        //#endregion
-
-        //#region 自由复制功能
-
-        // 代码区自由复制
+    // 代码区自由复制
+    function freeCopy() {
         $("#content_views pre code").css("user-select", "text");
 
         // 隐藏未登录复制时弹出的登录框
-        GM_addStyle(".passport-login-container{display:none!important;}");
+        hideLogin();
         // 修改按钮名称
         $(".hljs-button").attr("data-title", "复制");
         // 点击按钮复制整个代码块内容
@@ -53,17 +67,29 @@
         document.oncopy = (e) => {
             e.clipboardData.setData("text/plain", window.getSelection());
         };
-
-        //#endregion
-
-        // 隐藏下载的资源,即在推荐列表中只会显示文章,不会显示需要下载的资源
-        $(".recommend-item-box.type_download").css("display", "none");
     }
 
+    // 隐藏登录框
+    function hideLogin() {
+        GM_addStyle(".passport-login-container{display:none!important;}");
+    }
 
-    //#region 纯净模式功能
-    let pureModeOn = false;
+    // 隐藏作者系列文章列表fix在顶部的专栏信息
+    function hideColumnInfo() {
+        $(".column_info_box").css("display", "none");
+    }
 
+    // 全文阅读
+    function fullTextRead() {
+        // 不隐藏文章内容
+        $("#article_content").css("height", "auto");
+        //隐藏“关注展开”box
+        $(".hide-article-box").css("display", "none");
+        // 移除侧边栏目录点击事件，否则在未登录情况下点击后半部分目录会跳转到登录界面
+        $("#asidedirectory a").unbind("click");
+    }
+
+    // 纯净模式
     function pureMode(on) {
         if (on) {
             // 隐藏四周的栏位
@@ -92,35 +118,41 @@
         }
     }
 
+    // 纯净模式切换控制函数
     function handlePureMode() {
         pureModeOn = !pureModeOn;
         pureMode(pureModeOn);
-    };
-
-    // 快捷键控制纯净模式切换,快捷键默认为alt+z,如有需要可自行更改
-    document.onkeydown = (e) => {
-        if (e.altKey && e.key === "z") {
-            handlePureMode();
-        }
-    };
-
-    // 使用谷歌浏览器时,如果只是按下alt键会让焦点移动到'设置'上,按键事件失效,故在此阻止默认事件
-    document.onkeyup = e => {
-        if (e.key === 'Alt'){
-            e.preventDefault();
-        }
     }
 
-    // 菜单控制纯净模式切换
-    GM_registerMenuCommand('纯净模式',handlePureMode,'p');
+    function init() {
+        // 快捷键控制纯净模式切换,快捷键默认为alt+z,如有需要可自行更改
+        document.onkeydown = (e) => {
+            if (e.altKey && e.key === "z") {
+                handlePureMode();
+            }
+        };
 
-    //#endregion
+        // 使用谷歌浏览器时,如果只是按下alt键会让焦点移动到'设置'上,按键事件失效,故在此阻止默认事件
+        document.onkeyup = (e) => {
+            if (e.key === "Alt") {
+                e.preventDefault();
+            }
+        };
+
+        // 菜单控制纯净模式切换
+        GM_registerMenuCommand("纯净模式", handlePureMode, "p");
+    }
 
     if (document.readyState !== "loading") {
         // 所有dom节点加载完毕，调用函数
-        fn();
+        functionAggregation();
     } else {
         // dom节点未加载完毕，添加监听器，等待加载完成后调用函数
-        document.addEventListener("DOMContentLoaded", fn, false);
+        document.addEventListener(
+            "DOMContentLoaded",
+            functionAggregation,
+            false
+        );
     }
+
 })();
