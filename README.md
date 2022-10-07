@@ -5,28 +5,10 @@
 * CSDN去广告
 * CSDN免登陆阅读全文
 * CSDN免登陆自由复制
+* CSDN隐藏下载资源
+* CSDN纯净模式:只显示正文内容和底部推荐文章
 ## 注意
-### 使用
 * 本脚本基于油猴开发，使用前请先下载油猴。
 * 由于本脚本隐藏了登录框，导致点击登录时会没有反应。所以如果想要登录CSDN账号，请先关闭本脚本。
-### 编辑
-若想基于本脚本修改功能，请不要自行导入jquery，否则会导致该行代码失效:
-```javascript 
-$("#asidedirectory a").unbind('click');
-```
-原因为jQuery只能解绑本jQuery绑定的click事件，网页的click事件是由网页本身的jQuery附加的，如果采用自己导入的jQuery，则无法解绑。  
-# 
-如果一定要导入自己的jQuery，请在userScript中加上
-```javascript 
-// @grant        unsafeWindow
-```
-并且至少在调用该行代码
-```javascript 
-$("#asidedirectory a").unbind('click');
-```
-前加上
-```javascript 
-let $ = unsafeWindow.jQuery;
-```
-让'$'变更为网页本身的jQuery，让unbind函数能够正常工作。  
-之后再将$赋值为自己导入的jQuery。
+* 纯净模式切换快捷键默认为alt+z,如需自定义，请在代码中更改。
+* 本脚本隐藏了在推荐列表中的需要下载才能查看的资源，如果要下载csdn的资源，请先关闭本脚本。
