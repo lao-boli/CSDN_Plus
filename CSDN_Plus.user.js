@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         CSDN_Plus
 // @namespace    https://github.com/lao-boli
-// @version      1.1.2
+// @version      1.1.3
 // @description  CSDN去广告、免登陆阅读全文、自由复制、不显示需要下载的资源、纯净阅读模式
 // @author       hqully
 // @match        *://*.blog.csdn.net/*
@@ -50,7 +50,11 @@
     function freeCopy() {
         $("#content_views pre code").css("user-select", "text");
 
-        // 隐藏未登录复制时弹出的登录框
+        // 解绑csdn绑定的复制前需登录的事件
+        $("#content_views").unbind("keydown")
+        $("#content_views").unbind("copy")
+
+      // 隐藏未登录复制时弹出的登录框
         hideLogin();
         // 修改按钮名称
         $(".hljs-button").attr("data-title", "复制");
