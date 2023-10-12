@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         CSDN_Plus
 // @namespace    https://github.com/lao-boli
-// @version      1.1.3
+// @version      1.1.4
 // @description  CSDN去广告、免登陆阅读全文、自由复制、不显示需要下载的资源、纯净阅读模式
 // @author       hqully
 // @match        *://*.blog.csdn.net/*
@@ -25,6 +25,7 @@
         freeCopy();
         hideColumnInfo();
         hideDownload();
+        hideSide();
         extendCode();
         handlePureMode();
     }
@@ -76,11 +77,16 @@
     // 隐藏登录框
     function hideLogin() {
         GM_addStyle(".passport-login-container{display:none!important;}");
+        GM_addStyle(".passport-auto-tip-login-container{display:none!important;}");
     }
 
     // 隐藏作者系列文章列表fix在顶部的专栏信息
     function hideColumnInfo() {
         $(".column_info_box").css("display", "none");
+    }
+
+    function hideSide() {
+        GM_addStyle(".csdn-side-toolbar{display:none!important;}");
     }
 
     // 全文阅读
@@ -107,6 +113,7 @@
             $(".nodata .container").css("display", "flex");
             $(".nodata .container").css("flex", "auto");
             $(".nodata .container main").css("flex", "auto");
+            $(".nodata .container").css("margin-right", "0");
         } else {
             // 恢复四周的栏位
             GM_addStyle("#csdn-toolbar{display:inherit}");
