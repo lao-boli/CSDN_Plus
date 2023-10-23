@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         CSDN_Plus
 // @namespace    https://github.com/lao-boli
-// @version      1.1.4
+// @version      1.1.5
 // @description  CSDN去广告、免登陆阅读全文、自由复制、不显示需要下载的资源、纯净阅读模式
 // @author       hqully
 // @match        *://*.blog.csdn.net/*
@@ -33,8 +33,8 @@
     // 自动展开长代码块
     function extendCode() {
         $(".hide-preCode-box").css("display", "none");
-        $(".set-code-hide.prettyprint").removeClass("set-code-hide");
-        $(".set-code-hide").removeClass("set-code-hide");
+        $(".set-code-hide.prettyprint").attr('class',"set-code-show");
+        $(".set-code-hide").attr('class',"set-code-show");
     }
 
     function removeAds() {
